@@ -21,6 +21,9 @@ export default function SidebarLayout({ loaderData }: Route.ComponentProps) {
   const { contacts, q } = loaderData;
   const navigation = useNavigation();
   const submit = useSubmit();
+  const searching =
+    navigation.location &&
+    new URLSearchParams(navigation.location.search).has("q");
 
   const [query, setQuery] = useState(q || "");
 
@@ -38,18 +41,28 @@ export default function SidebarLayout({ loaderData }: Route.ComponentProps) {
           <Form
             id="search-form"
             role="search"
-            onChange={(e) => submit(e.currentTarget)}
+            onChange={(e) => {
+              const isFirstSearch = q === null;
+              submit(e.currentTarget, {
+                replace: !isFirstSearch,
+              });
+            }}
           >
             <input
               aria-label="Search contacts"
+              className={
+                navigation.state === "loading" && !searching ? "loading" : ""
+              }
               id="q"
               name="q"
               placeholder="Search"
               type="search"
-              onChange={(e) => setQuery(e.currentTarget.value)}
+              onChange={(e) => {
+                setQuery(e.currentTarget.value);
+              }}
               defaultValue={query}
             />
-            <div aria-hidden hidden={true} id="search-spinner" />
+            <div aria-hidden hidden={!searching} id="search-spinner" />
           </Form>
           <Form method="post">
             <button type="submit">New</button>
