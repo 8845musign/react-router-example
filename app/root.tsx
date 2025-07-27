@@ -1,14 +1,18 @@
 import {
-  Form,
-  Link,
   Outlet,
   Scripts,
   ScrollRestoration,
   isRouteErrorResponse,
 } from "react-router";
 import type { Route } from "./+types/root";
+import { createEmptyContact } from "./data";
 
 import appStylesHref from "./app.css?url";
+
+export async function action() {
+  const contact = await createEmptyContact();
+  return { contact };
+}
 
 export function HydrateFallback() {
   return (
