@@ -6,6 +6,7 @@ import {
 } from "@react-router/dev/routes";
 
 export default [
+  route("contacts/:contactId/destroy", "routes/destroy-contact.tsx"),
   layout("layouts/sidebar.tsx", [
     index("routes/home.tsx"),
     route("contacts/:contactId", "routes/contact.tsx"),
